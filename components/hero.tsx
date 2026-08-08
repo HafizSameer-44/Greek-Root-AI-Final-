@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "motion/react"
+import { motion } from "framer-motion"
 import { ArrowRight, Play, Sparkles, Bot, Workflow, Zap } from "lucide-react"
 import { ParticleField } from "@/components/particle-field"
 

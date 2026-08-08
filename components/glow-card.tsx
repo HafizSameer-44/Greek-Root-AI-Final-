@@ -1,7 +1,7 @@
 "use client"
 
 import type { LucideIcon } from "lucide-react"
-import { motion } from "motion/react"
+import { motion } from "framer-motion"
 
 export function GlowCard({
   icon: Icon,

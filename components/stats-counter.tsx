@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { motion, useInView } from "motion/react"
+import { motion, useInView } from "framer-motion"
 
 function useCounter(target: number, active: boolean, duration = 1600) {
   const [value, setValue] = useState(0)

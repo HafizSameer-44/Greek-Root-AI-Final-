@@ -1,7 +1,7 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { motion } from "motion/react"
+import { motion } from "framer-motion"
 
 export function Reveal({
   children,
