@@ -37,10 +37,10 @@ export function ContactForm() {
     const formData = new FormData(form)
 
     const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      business: formData.get("business"),
-      message: formData.get("message"),
+      name: String(formData.get("name") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
+      business: String(formData.get("business") ?? "").trim(),
+      message: String(formData.get("message") ?? "").trim(),
     }
 
     try {
@@ -52,8 +52,10 @@ export function ContactForm() {
         body: JSON.stringify(data),
       })
 
+      const result = await response.json()
+
       if (!response.ok) {
-        throw new Error("Failed to send message")
+        throw new Error(result.error || "Failed to send message.")
       }
 
       setStatus("done")
@@ -63,102 +65,89 @@ export function ContactForm() {
         setStatus("idle")
       }, 4200)
     } catch (error) {
-      console.error(error)
+      console.error("Contact form error:", error)
 
       setStatus("idle")
 
-      alert("Something went wrong. Please try again.")
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      )
     }
   }
 
   return (
     <motion.form
       onSubmit={handleSubmit}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="glass rounded-3xl p-6 sm:p-8"
+      transition={{ duration: 0.6 }}
+      className="space-y-5"
     >
-      <div className="grid gap-5 sm:grid-cols-2">
-        {fields.map((f) => (
-          <div
-            key={f.name}
-            className={
-              f.name === "business"
-                ? "sm:col-span-2"
-                : ""
-            }
-          >
-            <label
-              htmlFor={f.name}
-              className="mb-2 block text-sm font-medium text-foreground"
-            >
-              {f.label}
-            </label>
-
-            <input
-              id={f.name}
-              name={f.name}
-              type={f.type}
-              required={f.name !== "business"}
-              placeholder={f.placeholder}
-              className="w-full rounded-xl border border-input bg-background/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition-all focus:border-primary focus:shadow-[0_0_0_3px_color-mix(in_oklch,var(--color-primary)_18%,transparent),0_0_24px_color-mix(in_oklch,var(--color-primary)_22%,transparent)]"
-            />
-          </div>
-        ))}
-
-        <div className="sm:col-span-2">
+      {fields.map((field) => (
+        <div key={field.name} className="space-y-2">
           <label
-            htmlFor="message"
-            className="mb-2 block text-sm font-medium text-foreground"
+            htmlFor={field.name}
+            className="text-sm font-medium text-black dark:text-white"
           >
-            Message
+            {field.label}
           </label>
 
-          <textarea
-            id="message"
-            name="message"
-            rows={5}
+          <input
+            id={field.name}
+            name={field.name}
+            type={field.type}
+            placeholder={field.placeholder}
             required
-            placeholder="Tell us about your project and goals..."
-            className="w-full resize-none rounded-xl border border-input bg-background/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition-all focus:border-primary focus:shadow-[0_0_0_3px_color-mix(in_oklch,var(--color-primary)_18%,transparent),0_0_24px_color-mix(in_oklch,var(--color-primary)_22%,transparent)]"
+            disabled={status === "loading"}
+            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-black outline-none transition placeholder:text-black/35 focus:border-green-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/35"
           />
         </div>
+      ))}
+
+      <div className="space-y-2">
+        <label
+          htmlFor="message"
+          className="text-sm font-medium text-black dark:text-white"
+        >
+          Message
+        </label>
+
+        <textarea
+          id="message"
+          name="message"
+          placeholder="Tell us about your project..."
+          required
+          disabled={status === "loading"}
+          rows={6}
+          className="w-full resize-none rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm text-black outline-none transition placeholder:text-black/35 focus:border-green-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/35"
+        />
       </div>
 
-      <motion.button
+      <button
         type="submit"
-        disabled={status !== "idle"}
-        whileHover={{
-          scale: status === "idle" ? 1.02 : 1,
-        }}
-        whileTap={{
-          scale: status === "idle" ? 0.98 : 1,
-        }}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[0_0_36px_var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-70"
+        disabled={status === "loading" || status === "done"}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-black px-6 py-4 text-sm font-semibold text-white transition hover:bg-black/90 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-white dark:text-black dark:hover:bg-white/90"
       >
-        {status === "idle" && (
+        {status === "loading" ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Sending...
+          </>
+        ) : status === "done" ? (
+          <>
+            <Check className="h-4 w-4" />
+            Message Sent
+          </>
+        ) : (
           <>
             Send Message
             <Send className="h-4 w-4" />
           </>
         )}
-
-        {status === "loading" && (
-          <>
-            Sending
-            <Loader2 className="h-4 w-4 animate-spin" />
-          </>
-        )}
-
-        {status === "done" && (
-          <>
-            Message Sent
-            <Check className="h-4 w-4" />
-          </>
-        )}
-      </motion.button>
+      </button>
     </motion.form>
   )
 }

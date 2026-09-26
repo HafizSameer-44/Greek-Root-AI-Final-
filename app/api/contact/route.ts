@@ -12,7 +12,6 @@ function escapeHtml(value: unknown) {
 
 export async function POST(request: Request) {
   try {
-    // Get the API key at request time
     const apiKey = process.env.RESEND_API_KEY
 
     if (!apiKey) {
@@ -24,8 +23,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // IMPORTANT:
-    // Resend is initialized inside POST, not at the top of the file.
     const resend = new Resend(apiKey)
 
     const body = await request.json()
@@ -35,29 +32,22 @@ export async function POST(request: Request) {
     const business = String(body.business ?? "").trim()
     const message = String(body.message ?? "").trim()
 
-    // Required fields
     if (!name || !email || !message) {
       return NextResponse.json(
-        {
-          error: "Name, email and message are required.",
-        },
+        { error: "Name, email and message are required." },
         { status: 400 }
       )
     }
 
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        {
-          error: "Please enter a valid email address.",
-        },
+        { error: "Please enter a valid email address." },
         { status: 400 }
       )
     }
 
-    // Escape user input before putting it into HTML
     const safeName = escapeHtml(name)
     const safeEmail = escapeHtml(email)
     const safeBusiness = escapeHtml(business || "Not provided")
@@ -68,221 +58,67 @@ export async function POST(request: Request) {
       to: ["contact@greekroot.org"],
       replyTo: email,
       subject: `New Contact Form Message — ${name}`,
-
       html: `
         <!DOCTYPE html>
         <html>
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>New Contact Form Message</title>
-          </head>
+          <body style="margin:0;padding:0;background:#f5f7f6;font-family:Arial,Helvetica,sans-serif;color:#111;">
+            <div style="max-width:680px;margin:40px auto;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;">
 
-          <body
-            style="
-              margin: 0;
-              padding: 0;
-              background-color: #f5f7f6;
-              font-family: Arial, Helvetica, sans-serif;
-              color: #111111;
-            "
-          >
-            <div
-              style="
-                max-width: 680px;
-                margin: 40px auto;
-                background: #ffffff;
-                border: 1px solid #e5e7eb;
-                border-radius: 16px;
-                overflow: hidden;
-              "
-            >
-
-              <!-- Header -->
-              <div
-                style="
-                  padding: 28px 32px;
-                  background: #111111;
-                  color: #ffffff;
-                "
-              >
-                <div
-                  style="
-                    font-size: 12px;
-                    letter-spacing: 2px;
-                    text-transform: uppercase;
-                    color: #b7f7c5;
-                    margin-bottom: 10px;
-                  "
-                >
+              <div style="padding:28px 32px;background:#111;color:#fff;">
+                <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#b7f7c5;margin-bottom:10px;">
                   Greek Root AI
                 </div>
 
-                <h1
-                  style="
-                    margin: 0;
-                    font-size: 26px;
-                    line-height: 1.3;
-                    font-weight: 700;
-                  "
-                >
+                <h1 style="margin:0;font-size:26px;line-height:1.3;">
                   New Contact Form Message
                 </h1>
               </div>
 
-              <!-- Content -->
-              <div style="padding: 32px;">
+              <div style="padding:32px;">
 
-                <div
-                  style="
-                    margin-bottom: 24px;
-                    padding: 18px;
-                    background: #f7faf8;
-                    border: 1px solid #e2e8e4;
-                    border-radius: 12px;
-                  "
-                >
-                  <div
-                    style="
-                      font-size: 12px;
-                      color: #6b7280;
-                      margin-bottom: 6px;
-                      text-transform: uppercase;
-                      letter-spacing: 1px;
-                    "
-                  >
+                <div style="margin-bottom:20px;padding:18px;background:#f7faf8;border:1px solid #e2e8e4;border-radius:12px;">
+                  <div style="font-size:12px;color:#6b7280;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">
                     Full Name
                   </div>
-
-                  <div
-                    style="
-                      font-size: 16px;
-                      font-weight: 600;
-                      color: #111111;
-                    "
-                  >
+                  <div style="font-size:16px;font-weight:600;">
                     ${safeName}
                   </div>
                 </div>
 
-                <div
-                  style="
-                    margin-bottom: 24px;
-                    padding: 18px;
-                    background: #f7faf8;
-                    border: 1px solid #e2e8e4;
-                    border-radius: 12px;
-                  "
-                >
-                  <div
-                    style="
-                      font-size: 12px;
-                      color: #6b7280;
-                      margin-bottom: 6px;
-                      text-transform: uppercase;
-                      letter-spacing: 1px;
-                    "
-                  >
+                <div style="margin-bottom:20px;padding:18px;background:#f7faf8;border:1px solid #e2e8e4;border-radius:12px;">
+                  <div style="font-size:12px;color:#6b7280;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">
                     Email
                   </div>
-
-                  <div
-                    style="
-                      font-size: 16px;
-                      font-weight: 600;
-                    "
-                  >
-                    <a
-                      href="mailto:${safeEmail}"
-                      style="
-                        color: #15803d;
-                        text-decoration: none;
-                      "
-                    >
+                  <div style="font-size:16px;font-weight:600;">
+                    <a href="mailto:${safeEmail}" style="color:#15803d;text-decoration:none;">
                       ${safeEmail}
                     </a>
                   </div>
                 </div>
 
-                <div
-                  style="
-                    margin-bottom: 24px;
-                    padding: 18px;
-                    background: #f7faf8;
-                    border: 1px solid #e2e8e4;
-                    border-radius: 12px;
-                  "
-                >
-                  <div
-                    style="
-                      font-size: 12px;
-                      color: #6b7280;
-                      margin-bottom: 6px;
-                      text-transform: uppercase;
-                      letter-spacing: 1px;
-                    "
-                  >
+                <div style="margin-bottom:20px;padding:18px;background:#f7faf8;border:1px solid #e2e8e4;border-radius:12px;">
+                  <div style="font-size:12px;color:#6b7280;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">
                     Business
                   </div>
-
-                  <div
-                    style="
-                      font-size: 16px;
-                      font-weight: 600;
-                      color: #111111;
-                    "
-                  >
+                  <div style="font-size:16px;font-weight:600;">
                     ${safeBusiness}
                   </div>
                 </div>
 
-                <div
-                  style="
-                    padding: 22px;
-                    background: #ffffff;
-                    border: 1px solid #e5e7eb;
-                    border-radius: 12px;
-                  "
-                >
-                  <div
-                    style="
-                      font-size: 12px;
-                      color: #6b7280;
-                      margin-bottom: 10px;
-                      text-transform: uppercase;
-                      letter-spacing: 1px;
-                    "
-                  >
+                <div style="padding:22px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;">
+                  <div style="font-size:12px;color:#6b7280;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">
                     Message
                   </div>
-
-                  <div
-                    style="
-                      font-size: 15px;
-                      line-height: 1.7;
-                      color: #222222;
-                    "
-                  >
+                  <div style="font-size:15px;line-height:1.7;color:#222;">
                     ${safeMessage}
                   </div>
                 </div>
 
               </div>
 
-              <!-- Footer -->
-              <div
-                style="
-                  padding: 20px 32px;
-                  background: #f7f7f7;
-                  border-top: 1px solid #e5e7eb;
-                  font-size: 12px;
-                  color: #6b7280;
-                "
-              >
+              <div style="padding:20px 32px;background:#f7f7f7;border-top:1px solid #e5e7eb;font-size:12px;color:#6b7280;">
                 This message was submitted through the
-                <strong style="color: #111111;">
-                  Greek Root AI
-                </strong>
+                <strong style="color:#111;">Greek Root AI</strong>
                 website contact form.
               </div>
 
@@ -296,9 +132,7 @@ export async function POST(request: Request) {
       console.error("Resend error:", error)
 
       return NextResponse.json(
-        {
-          error: "Failed to send email.",
-        },
+        { error: "Failed to send email." },
         { status: 500 }
       )
     }
