@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 function escapeHtml(value: unknown) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -14,21 +12,22 @@ function escapeHtml(value: unknown) {
 
 export async function POST(request: Request) {
   try {
-    // Check API key
-    if (!process.env.RESEND_API_KEY) {
+    // Get the API key at request time
+    const apiKey = process.env.RESEND_API_KEY
+
+    if (!apiKey) {
       console.error("RESEND_API_KEY is missing")
 
       return NextResponse.json(
-        {
-          error: "Email service is not configured.",
-        },
-        {
-          status: 500,
-        }
+        { error: "Email service is not configured." },
+        { status: 500 }
       )
     }
 
-    // Read request body
+    // IMPORTANT:
+    // Resend is initialized inside POST, not at the top of the file.
+    const resend = new Resend(apiKey)
+
     const body = await request.json()
 
     const name = String(body.name ?? "").trim()
@@ -42,9 +41,7 @@ export async function POST(request: Request) {
         {
           error: "Name, email and message are required.",
         },
-        {
-          status: 400,
-        }
+        { status: 400 }
       )
     }
 
@@ -56,26 +53,20 @@ export async function POST(request: Request) {
         {
           error: "Please enter a valid email address.",
         },
-        {
-          status: 400,
-        }
+        { status: 400 }
       )
     }
 
-    // Escape user input before putting it inside HTML
+    // Escape user input before putting it into HTML
     const safeName = escapeHtml(name)
     const safeEmail = escapeHtml(email)
     const safeBusiness = escapeHtml(business || "Not provided")
     const safeMessage = escapeHtml(message).replace(/\n/g, "<br />")
 
-    // Send email
     const { data, error } = await resend.emails.send({
       from: "Greek Root AI <contact@greekroot.org>",
-
       to: ["contact@greekroot.org"],
-
       replyTo: email,
-
       subject: `New Contact Form Message — ${name}`,
 
       html: `
@@ -87,175 +78,220 @@ export async function POST(request: Request) {
             <title>New Contact Form Message</title>
           </head>
 
-          <body style="
-            margin: 0;
-            padding: 0;
-            background: #f5f5f5;
-            font-family: Arial, Helvetica, sans-serif;
-            color: #111111;
-          ">
-
-            <div style="
-              max-width: 700px;
-              margin: 0 auto;
-              padding: 40px 20px;
-            ">
-
-              <div style="
+          <body
+            style="
+              margin: 0;
+              padding: 0;
+              background-color: #f5f7f6;
+              font-family: Arial, Helvetica, sans-serif;
+              color: #111111;
+            "
+          >
+            <div
+              style="
+                max-width: 680px;
+                margin: 40px auto;
                 background: #ffffff;
-                border: 1px solid #e5e5e5;
-                border-radius: 20px;
+                border: 1px solid #e5e7eb;
+                border-radius: 16px;
                 overflow: hidden;
-              ">
+              "
+            >
 
-                <!-- Header -->
-                <div style="
-                  padding: 28px 30px;
-                  border-bottom: 1px solid #e5e5e5;
-                ">
-
-                  <h1 style="
-                    margin: 0;
-                    font-size: 24px;
-                    line-height: 1.3;
-                    color: #111111;
-                  ">
-                    New Contact Form Message
-                  </h1>
-
-                  <p style="
-                    margin: 8px 0 0;
-                    font-size: 14px;
-                    color: #777777;
-                  ">
-                    Greek Root AI Website
-                  </p>
-
+              <!-- Header -->
+              <div
+                style="
+                  padding: 28px 32px;
+                  background: #111111;
+                  color: #ffffff;
+                "
+              >
+                <div
+                  style="
+                    font-size: 12px;
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                    color: #b7f7c5;
+                    margin-bottom: 10px;
+                  "
+                >
+                  Greek Root AI
                 </div>
 
-                <!-- Content -->
-                <div style="padding: 30px;">
+                <h1
+                  style="
+                    margin: 0;
+                    font-size: 26px;
+                    line-height: 1.3;
+                    font-weight: 700;
+                  "
+                >
+                  New Contact Form Message
+                </h1>
+              </div>
 
-                  <!-- Name -->
-                  <div style="margin-bottom: 24px;">
-                    <div style="
+              <!-- Content -->
+              <div style="padding: 32px;">
+
+                <div
+                  style="
+                    margin-bottom: 24px;
+                    padding: 18px;
+                    background: #f7faf8;
+                    border: 1px solid #e2e8e4;
+                    border-radius: 12px;
+                  "
+                >
+                  <div
+                    style="
                       font-size: 12px;
-                      font-weight: 700;
+                      color: #6b7280;
+                      margin-bottom: 6px;
                       text-transform: uppercase;
-                      letter-spacing: 0.08em;
-                      color: #777777;
-                      margin-bottom: 7px;
-                    ">
-                      Full Name
-                    </div>
-
-                    <div style="
-                      font-size: 16px;
-                      color: #111111;
-                    ">
-                      ${safeName}
-                    </div>
+                      letter-spacing: 1px;
+                    "
+                  >
+                    Full Name
                   </div>
 
-                  <!-- Email -->
-                  <div style="margin-bottom: 24px;">
-                    <div style="
-                      font-size: 12px;
-                      font-weight: 700;
-                      text-transform: uppercase;
-                      letter-spacing: 0.08em;
-                      color: #777777;
-                      margin-bottom: 7px;
-                    ">
-                      Email
-                    </div>
-
-                    <div style="
+                  <div
+                    style="
                       font-size: 16px;
+                      font-weight: 600;
                       color: #111111;
-                    ">
+                    "
+                  >
+                    ${safeName}
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin-bottom: 24px;
+                    padding: 18px;
+                    background: #f7faf8;
+                    border: 1px solid #e2e8e4;
+                    border-radius: 12px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: #6b7280;
+                      margin-bottom: 6px;
+                      text-transform: uppercase;
+                      letter-spacing: 1px;
+                    "
+                  >
+                    Email
+                  </div>
+
+                  <div
+                    style="
+                      font-size: 16px;
+                      font-weight: 600;
+                    "
+                  >
+                    <a
+                      href="mailto:${safeEmail}"
+                      style="
+                        color: #15803d;
+                        text-decoration: none;
+                      "
+                    >
                       ${safeEmail}
-                    </div>
+                    </a>
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin-bottom: 24px;
+                    padding: 18px;
+                    background: #f7faf8;
+                    border: 1px solid #e2e8e4;
+                    border-radius: 12px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: #6b7280;
+                      margin-bottom: 6px;
+                      text-transform: uppercase;
+                      letter-spacing: 1px;
+                    "
+                  >
+                    Business
                   </div>
 
-                  <!-- Business -->
-                  <div style="margin-bottom: 24px;">
-                    <div style="
-                      font-size: 12px;
-                      font-weight: 700;
-                      text-transform: uppercase;
-                      letter-spacing: 0.08em;
-                      color: #777777;
-                      margin-bottom: 7px;
-                    ">
-                      Business
-                    </div>
-
-                    <div style="
+                  <div
+                    style="
                       font-size: 16px;
+                      font-weight: 600;
                       color: #111111;
-                    ">
-                      ${safeBusiness}
-                    </div>
+                    "
+                  >
+                    ${safeBusiness}
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    padding: 22px;
+                    background: #ffffff;
+                    border: 1px solid #e5e7eb;
+                    border-radius: 12px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: #6b7280;
+                      margin-bottom: 10px;
+                      text-transform: uppercase;
+                      letter-spacing: 1px;
+                    "
+                  >
+                    Message
                   </div>
 
-                  <!-- Message -->
-                  <div>
-                    <div style="
-                      font-size: 12px;
-                      font-weight: 700;
-                      text-transform: uppercase;
-                      letter-spacing: 0.08em;
-                      color: #777777;
-                      margin-bottom: 7px;
-                    ">
-                      Message
-                    </div>
-
-                    <div style="
-                      padding: 18px;
-                      background: #f7f7f7;
-                      border: 1px solid #eeeeee;
-                      border-radius: 12px;
+                  <div
+                    style="
                       font-size: 15px;
                       line-height: 1.7;
                       color: #222222;
-                    ">
-                      ${safeMessage}
-                    </div>
+                    "
+                  >
+                    ${safeMessage}
                   </div>
-
-                </div>
-
-                <!-- Footer -->
-                <div style="
-                  padding: 20px 30px;
-                  border-top: 1px solid #e5e5e5;
-                  background: #fafafa;
-                ">
-
-                  <p style="
-                    margin: 0;
-                    font-size: 12px;
-                    line-height: 1.6;
-                    color: #888888;
-                  ">
-                    This message was submitted through the Greek Root AI
-                    website contact form.
-                  </p>
-
                 </div>
 
               </div>
 
-            </div>
+              <!-- Footer -->
+              <div
+                style="
+                  padding: 20px 32px;
+                  background: #f7f7f7;
+                  border-top: 1px solid #e5e7eb;
+                  font-size: 12px;
+                  color: #6b7280;
+                "
+              >
+                This message was submitted through the
+                <strong style="color: #111111;">
+                  Greek Root AI
+                </strong>
+                website contact form.
+              </div>
 
+            </div>
           </body>
         </html>
       `,
     })
 
-    // Resend returned an error
     if (error) {
       console.error("Resend error:", error)
 
@@ -263,22 +299,17 @@ export async function POST(request: Request) {
         {
           error: "Failed to send email.",
         },
-        {
-          status: 500,
-        }
+        { status: 500 }
       )
     }
 
-    // Success
     return NextResponse.json(
       {
         success: true,
         message: "Message sent successfully.",
         id: data?.id,
       },
-      {
-        status: 200,
-      }
+      { status: 200 }
     )
   } catch (error) {
     console.error("Contact form error:", error)
@@ -287,9 +318,7 @@ export async function POST(request: Request) {
       {
         error: "Something went wrong while sending the message.",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     )
   }
 }
