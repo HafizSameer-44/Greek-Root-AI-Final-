@@ -134,7 +134,7 @@ export function Navbar() {
             })}
             <Link
               href="/contact"
-              className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground"
+              className="mt-2 flex items-center border border-gray justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground"
             >
               Get Started
               <ArrowRight className="h-4 w-4" />

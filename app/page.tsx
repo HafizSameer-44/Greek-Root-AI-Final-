@@ -88,7 +88,7 @@ export default function HomePage() {
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href="/contact"
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-secondary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-all hover:shadow-[0_0_36px_var(--color-primary)] sm:w-auto"
+                  className="group inline-flex w-full border border-gray items-center justify-center gap-2 rounded-full bg-secondary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-all hover:shadow-[0_0_36px_var(--color-primary)] sm:w-auto"
                 >
                   Get Started
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

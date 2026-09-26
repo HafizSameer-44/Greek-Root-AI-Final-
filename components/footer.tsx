@@ -57,7 +57,7 @@ export default function Footer() {
             <div className="mt-8 flex items-center gap-3">
 
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/greekroot-ai/home/"
                 target="_blank"
                 className="rounded-xl border border-gray-200 bg-white p-3 text-gray-700 transition hover:border-green-600 hover:bg-green-600 hover:text-white shadow-sm"
                 aria-label="LinkedIn"
@@ -67,15 +67,7 @@ export default function Footer() {
                 </svg>
               </a>
 
-              <a
-                href="https://github.com"
-                target="_blank"
-               className="rounded-xl border border-gray-200 bg-white p-3 text-gray-700 transition hover:border-green-600 hover:bg-green-600 hover:text-white shadow-sm"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.744.083-.729.083-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.76-1.605-2.665-.3-5.467-1.332-5.467-5.93 0-1.31.467-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.5 11.5 0 0 1 3-.405c1.02.005 2.045.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.435.37.81 1.096.81 2.21 0 1.595-.015 2.88-.015 3.27 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297 24 5.67 18.63.297 12 .297z" />
-                </svg>
-              </a>
+        
 
               <a
                 href="mailto:contact@greekroot.org"
@@ -98,7 +90,7 @@ export default function Footer() {
 
             <div className="mt-6 space-y-4">              <Link
                 href="/"
-                className="group flex items-center justify-between text-gray-700 transition hover:text-emerald-300"
+                className="group flex items-center justify-between text-gray-700 transition hover:text-green-600"
               >
                 Home
                 <ArrowUpRight className="h-4 w-4 opacity-0 transition group-hover:opacity-100" />
@@ -106,7 +98,7 @@ export default function Footer() {
 
       <Link
   href="/why-choose-us"
-  className="group flex items-center justify-between text-gray-700 transition hover:text-emerald-300"
+  className="group flex items-center justify-between text-gray-700 transition hover:text-green-600"
 >
   Why Choose Us
   <ArrowUpRight className="h-4 w-4 opacity-0 transition group-hover:opacity-100" />
@@ -114,7 +106,7 @@ export default function Footer() {
 
               <Link
                 href="/services"
-                className="group flex items-center justify-between text-gray-700 transition hover:text-emerald-300"
+                className="group flex items-center justify-between text-gray-700 transition hover:text-green-600"
               >
                 Services
                 <ArrowUpRight className="h-4 w-4 opacity-0 transition group-hover:opacity-100" />
@@ -122,7 +114,7 @@ export default function Footer() {
 
               <Link
                 href="/contact"
-                className="group flex items-center justify-between text-gray-700 transition hover:text-emerald-300"
+                className="group flex items-center justify-between text-gray-700 transition hover:text-green-600"
               >
                 Contact
                 <ArrowUpRight className="h-4 w-4 opacity-0 transition group-hover:opacity-100" />

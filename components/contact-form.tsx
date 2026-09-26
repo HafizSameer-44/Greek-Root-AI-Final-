@@ -5,19 +5,70 @@ import { motion } from "framer-motion"
 import { Send, Check, Loader2 } from "lucide-react"
 
 const fields = [
-  { name: "name", label: "Full Name", type: "text", placeholder: "Jane Doe" },
-  { name: "email", label: "Email", type: "email", placeholder: "jane@company.com" },
-  { name: "business", label: "Business", type: "text", placeholder: "Acme Inc." },
+  {
+    name: "name",
+    label: "Full Name",
+    type: "text",
+    placeholder: "Jane Doe",
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "jane@company.com",
+  },
+  {
+    name: "business",
+    label: "Business",
+    type: "text",
+    placeholder: "Acme Inc.",
+  },
 ] as const
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     setStatus("loading")
-    setTimeout(() => setStatus("done"), 1400)
-    setTimeout(() => setStatus("idle"), 4200)
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      business: formData.get("business"),
+      message: formData.get("message"),
+    }
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to send message")
+      }
+
+      setStatus("done")
+      form.reset()
+
+      setTimeout(() => {
+        setStatus("idle")
+      }, 4200)
+    } catch (error) {
+      console.error(error)
+
+      setStatus("idle")
+
+      alert("Something went wrong. Please try again.")
+    }
   }
 
   return (
@@ -31,13 +82,21 @@ export function ContactForm() {
     >
       <div className="grid gap-5 sm:grid-cols-2">
         {fields.map((f) => (
-          <div key={f.name} className={f.name === "business" ? "sm:col-span-2" : ""}>
+          <div
+            key={f.name}
+            className={
+              f.name === "business"
+                ? "sm:col-span-2"
+                : ""
+            }
+          >
             <label
               htmlFor={f.name}
               className="mb-2 block text-sm font-medium text-foreground"
             >
               {f.label}
             </label>
+
             <input
               id={f.name}
               name={f.name}
@@ -48,6 +107,7 @@ export function ContactForm() {
             />
           </div>
         ))}
+
         <div className="sm:col-span-2">
           <label
             htmlFor="message"
@@ -55,6 +115,7 @@ export function ContactForm() {
           >
             Message
           </label>
+
           <textarea
             id="message"
             name="message"
@@ -69,9 +130,13 @@ export function ContactForm() {
       <motion.button
         type="submit"
         disabled={status !== "idle"}
-        whileHover={{ scale: status === "idle" ? 1.02 : 1 }}
-        whileTap={{ scale: status === "idle" ? 0.98 : 1 }}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[0_0_36px_var(--color-primary)] "
+        whileHover={{
+          scale: status === "idle" ? 1.02 : 1,
+        }}
+        whileTap={{
+          scale: status === "idle" ? 0.98 : 1,
+        }}
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[0_0_36px_var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-70"
       >
         {status === "idle" && (
           <>
@@ -79,12 +144,14 @@ export function ContactForm() {
             <Send className="h-4 w-4" />
           </>
         )}
+
         {status === "loading" && (
           <>
             Sending
             <Loader2 className="h-4 w-4 animate-spin" />
           </>
         )}
+
         {status === "done" && (
           <>
             Message Sent
