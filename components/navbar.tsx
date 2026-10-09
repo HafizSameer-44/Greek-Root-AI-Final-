@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils"
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/why-choose-us", label: "Why Choose Us" },
+  { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
+  { href: "/ai-news", label: "AI News" },
   { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
 ]
 
 export function Navbar() {
@@ -23,8 +23,10 @@ export function Navbar() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
+
     onScroll()
     window.addEventListener("scroll", onScroll)
+
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
@@ -37,13 +39,17 @@ export function Navbar() {
       <div
         className={cn(
           "transition-all duration-300",
-          scrolled ? "glass border-b border-border/60" : "bg-transparent",
+          scrolled
+            ? "glass border-b border-border/60"
+            : "bg-transparent"
         )}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 lg:px-8">
+          {/* Logo */}
           <Link href="/" className="group flex items-center gap-2.5">
             <span className="relative flex h-9 w-9 items-center justify-center">
               <span className="absolute inset-0 rounded-full bg-primary/25 blur-md transition-opacity group-hover:opacity-100" />
+
               <Image
                 src="/icon.png"
                 alt="Greek Root AI logo"
@@ -53,62 +59,88 @@ export function Navbar() {
                 style={{ borderRadius: "20%" }}
               />
             </span>
+
             <span className="text-base font-semibold tracking-tight text-foreground">
-              Greek Root <span className="text-primary glow-text">AI</span>
+              Greek Root{" "}
+              <span className="text-primary glow-text">AI</span>
             </span>
           </Link>
 
+          {/* Desktop Navigation */}
           <div className="hidden items-center gap-1 md:flex">
             {links.map((link) => {
-              const active = pathname === link.href
+              const active =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname === link.href ||
+                    pathname.startsWith(`${link.href}/`)
+
               return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
                     "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
                     active
                       ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground",
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {active && (
                     <motion.span
                       layoutId="nav-active"
                       className="absolute inset-0 rounded-full bg-primary/10 glow-border"
-                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 32,
+                      }}
                     />
                   )}
-                  <span className="relative z-10">{link.label}</span>
+
+                  <span className="relative z-10">
+                    {link.label}
+                  </span>
                 </Link>
               )
             })}
           </div>
 
+          {/* Desktop CTA */}
           <div className="hidden md:block">
             <Link
               href="/contact"
               className="group inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:shadow-[0_0_28px_var(--color-primary)]"
             >
-              Get Started
+              Let's Talk
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
 
+          {/* Mobile Menu Button */}
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpen((value) => !value)}
             className="flex h-10 w-10 items-center justify-center rounded-full glass text-foreground md:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {open ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </nav>
       </div>
 
+      {/* Mobile Navigation */}
       <AnimatePresence>
         {open && (
           <motion.div
+            id="mobile-navigation"
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
@@ -116,27 +148,35 @@ export function Navbar() {
             className="glass mx-4 mt-2 rounded-2xl border border-border/60 p-3 md:hidden"
           >
             {links.map((link) => {
-              const active = pathname === link.href
+              const active =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname === link.href ||
+                    pathname.startsWith(`${link.href}/`)
+
               return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
                     "block rounded-xl px-4 py-3 text-sm font-medium transition-colors",
                     active
                       ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                   )}
                 >
                   {link.label}
                 </Link>
               )
             })}
+
+            {/* Mobile CTA */}
             <Link
               href="/contact"
-              className="mt-2 flex items-center border border-gray justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground"
+              className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground"
             >
-              Get Started
+              Let's Talk
               <ArrowRight className="h-4 w-4" />
             </Link>
           </motion.div>
