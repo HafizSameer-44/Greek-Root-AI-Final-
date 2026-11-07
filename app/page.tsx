@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { Hero } from "@/components/hero"
-import { StatsCounter } from "@/components/stats-counter"
+import { TestimonialsMarquee } from "@/components/stats-counter"
 import { ReasonsGrid, ServicesGrid } from "@/components/card-grids"
 import { Reveal } from "@/components/reveal"
 
@@ -10,9 +10,42 @@ export default function HomePage() {
     <>
       <Hero />
 
-      {/* Stats */}
+      {/* Testimonials Marquee */}
       <section className="mx-auto max-w-7xl px-5 pb-24 lg:px-8">
-        <StatsCounter />
+        <TestimonialsMarquee />
+      </section>
+
+      {/* Calendly Booking Section (Fully Expanded & Fitted) */}
+      <section className="mx-auto max-w-7xl px-5 pb-24 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center mb-10">
+          <Reveal>
+            <span className="text-xs font-medium uppercase tracking-widest text-primary">
+              Schedule A Call
+            </span>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+              Book Your Free AI Strategy Call
+            </h2>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <p className="mt-4 text-pretty text-muted-foreground">
+              On this call, we&apos;ll map out exactly how to implement an AI Setup/System/Solution for your business needs.
+            </p>
+          </Reveal>
+        </div>
+
+        <Reveal delay={0.2}>
+          <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-white/10 glass bg-card/60 shadow-2xl backdrop-blur-xl">
+            <div className="p-2 sm:p-4">
+              <iframe
+                src="https://calendly.com/hafizsameer220/30min"
+                className="w-full h-[850px] sm:h-[900px] rounded-2xl border-0"
+                title="Greek Root AI Strategy Call"
+              />
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* Why choose us preview */}
