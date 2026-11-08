@@ -1,191 +1,246 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import Link from "next/link"
 import Image from "next/image"
-import { Target, Eye, Sparkles, ArrowRight } from "lucide-react"
-import { Reveal } from "@/components/reveal"
+import { usePathname } from "next/navigation"
+import { Menu, X, ArrowRight, CalendarDays } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { cn } from "@/lib/utils"
 
-// Custom LinkedIn SVG Icon to prevent missing export errors
-function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="16"
-      height="16"
-      stroke="currentColor"
-      strokeWidth="2"
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  )
-}
-
-const teamMembers = [
-  {
-    name: "Hafiz Sameer",
-    role: "Founder & CEO",
-    image: "/hafiz-sameer.jpg",
-    bio: "AI Systems Architect and founder obsessed with building scalable autonomous AI workflows, agents, and full-stack solutions.",
-    linkedin: "https://www.linkedin.com/in/hafiz-sameer-848949430/",
-  },
-  {
-    name: "Kashan Khalid",
-    role: "Co-Founder",
-    image: "/kashif-khalid.jpg",
-    bio: "Tech strategist and entrepreneur leveraging cutting-edge AI tools and engineering to automate complex business operations.",
-    linkedin: "https://www.linkedin.com/in/kashankhalid123/",
-  },
+const navigation = [
+  { href: "/about", label: "About" },
+  { href: "/team", label: "Meet the Team" },
+  { href: "/faq", label: "FAQ" },
 ]
 
-export default function TeamPage() {
+export function Navbar() {
+  const pathname = usePathname()
+
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false)
+
+  const CALENDLY_URL = "https://calendly.com/hafizsameer220/30min"
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12)
+
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
+  const isActive = (href: string) =>
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(`${href}/`)
+
+  const servicesActive =
+    pathname === "/services" || pathname.startsWith("/services/")
+
+  const closeMenus = () => {
+    setOpen(false)
+  }
+
+  const navLinkClass = (href: string) =>
+    cn(
+      "whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium transition-all duration-200",
+      isActive(href)
+        ? "bg-[#effcf3] text-[#18864b]"
+        : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-950"
+    )
+
+  const ctaClass =
+    "group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-black px-4.5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-neutral-800 hover:shadow-[0_5px_20px_rgba(0,0,0,0.18)] cursor-pointer"
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-neutral-50 via-[#f4fbf7] to-neutral-50 pt-28 pb-24 text-neutral-900">
-      
-      {/* Background Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[450px] w-[700px] rounded-full bg-[#a7f3c0]/20 blur-[130px] pointer-events-none" />
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 px-3 pt-2 sm:px-5 sm:pt-3 lg:px-8">
+        <div
+          className={cn(
+            "mx-auto max-w-[1380px] rounded-[24px] border border-neutral-300/90 bg-white/85 backdrop-blur-md transition-all duration-300 sm:rounded-[30px]",
+            scrolled
+              ? "border-neutral-300 bg-white/95 shadow-[0_10px_32px_rgba(0,0,0,0.10)]"
+              : "shadow-[0_6px_24px_rgba(0,0,0,0.07)]"
+          )}
+        >
+          <nav className="flex min-h-[64px] items-center justify-between gap-3 px-4 py-2.5 sm:min-h-[72px] sm:px-6 lg:px-8">
+            <Link
+              href="/"
+              onClick={closeMenus}
+              className="group flex min-w-0 shrink items-center gap-2.5"
+            >
+              <span className="relative flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center">
+                <span className="absolute inset-0 rounded-full bg-[#a7f3c0]/50 opacity-60 blur-lg transition-opacity group-hover:opacity-100" />
+                <Image
+                  src="/icon.png"
+                  alt="Greek Root AI logo"
+                  width={36}
+                  height={36}
+                  className="relative z-10 h-8 w-8 sm:h-9 sm:w-9 object-contain rounded-[20%]"
+                  priority
+                />
+              </span>
 
-      <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
-        
-        {/* Page Header */}
-        <div className="mx-auto max-w-3xl text-center">
-          <Reveal>
-            <span className="inline-block rounded-full bg-[#effcf3] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#18864b] border border-[#a7f3c0]/40">
-              Meet the Team
-            </span>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h1 className="mt-4 text-balance text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">
-              The people behind <span className="text-[#18864b]">Greek Root AI</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.16}>
-            <p className="mt-4 text-pretty text-base text-neutral-600 sm:text-lg">
-              Founded in 2026 — driven by the mission to make enterprise-grade AI automation accessible and effortless for growing businesses.
-            </p>
-          </Reveal>
-        </div>
+              <span className="whitespace-nowrap text-sm sm:text-base font-semibold tracking-tight text-neutral-900">
+                Greek Root{" "}
+                <span className="text-[#218c50]">AI</span>
+              </span>
+            </Link>
 
-        {/* 2 Centered Team Cards with Profile Pictures */}
-        <div className="mt-16 flex flex-col md:flex-row items-center justify-center gap-8 max-w-4xl mx-auto">
-          {teamMembers.map((member, idx) => (
-            <Reveal key={member.name} delay={0.2 + idx * 0.1} className="w-full md:w-1/2">
-              <div className="flex flex-col justify-between h-full rounded-[28px] border border-neutral-200/90 bg-white/80 p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] backdrop-blur-xl transition-all duration-300 hover:border-[#218c50]/40 hover:shadow-[0_20px_40px_rgba(33,140,80,0.08)] text-center items-center">
-                
-                {/* Profile Image & Role Tag */}
-                <div className="flex flex-col items-center">
-                  <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-[#18864b]/30 p-1 bg-gradient-to-tr from-[#a7f3c0]/40 to-transparent shadow-md">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      width={112}
-                      height={112}
-                      className="h-full w-full rounded-full object-cover"
-                    />
-                  </div>
+            <div className="hidden items-center gap-1 xl:flex">
+              <Link
+                href="/services"
+                aria-current={servicesActive ? "page" : undefined}
+                className={cn(
+                  "whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium transition-all duration-200",
+                  servicesActive
+                    ? "bg-[#effcf3] text-[#18864b]"
+                    : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-950"
+                )}
+              >
+                Services
+              </Link>
 
-                  <span className="mt-4 inline-block rounded-full bg-[#effcf3] px-3.5 py-1 text-xs font-semibold text-[#18864b]">
-                    {member.role}
-                  </span>
-
-                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-neutral-900">
-                    {member.name}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-neutral-600">
-                    {member.bio}
-                  </p>
-                </div>
-
-                {/* Light Minimal LinkedIn Button */}
-                <div className="mt-8 pt-6 border-t border-neutral-100 w-full flex justify-center">
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50/80 px-5 py-2.5 text-xs font-semibold text-neutral-700 transition-all hover:border-[#0a66c2]/40 hover:bg-[#0a66c2]/5 hover:text-[#0a66c2]"
-                  >
-                    <LinkedinIcon className="h-4 w-4 text-[#0a66c2]" />
-                    <span>LinkedIn Profile</span>
-                  </a>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Story & Mission Section */}
-        <div className="mt-24 mx-auto max-w-4xl">
-          <Reveal>
-            <div className="rounded-[32px] border border-neutral-200/90 bg-white/70 p-8 sm:p-12 shadow-lg backdrop-blur-xl">
-              <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl text-center sm:text-left">
-                Built on a simple belief
-              </h2>
-              <p className="mt-4 text-neutral-600 leading-relaxed text-base sm:text-lg">
-                Founded in 2026, Greek Root AI was built on a straightforward belief: the best AI tools shouldn&apos;t be locked behind enterprise budgets and six-month consulting engagements.
-              </p>
-              <p className="mt-4 text-neutral-600 leading-relaxed text-base sm:text-lg">
-                We saw businesses of all sizes spending too much time on manual processes that could be automated. Meanwhile, AI was advancing faster than most teams could keep up with. We built Greek Root AI to bridge that gap, giving companies the AI infrastructure they need to work smarter, move faster, and focus on growth.
-              </p>
-
-              {/* Grid for Mission, Vision, Approach */}
-              <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-                <div className="rounded-2xl bg-[#effcf3]/60 border border-[#a7f3c0]/50 p-5 text-center sm:text-left">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#18864b] text-white mb-3 mx-auto sm:mx-0">
-                    <Target className="h-5 w-5" />
-                  </div>
-                  <h4 className="font-semibold text-neutral-900">Our Mission</h4>
-                  <p className="mt-2 text-xs text-neutral-600 leading-relaxed">
-                    To make powerful AI automation accessible to every ambitious business to scale operations.
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-[#effcf3]/60 border border-[#a7f3c0]/50 p-5 text-center sm:text-left">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#18864b] text-white mb-3 mx-auto sm:mx-0">
-                    <Eye className="h-5 w-5" />
-                  </div>
-                  <h4 className="font-semibold text-neutral-900">Our Vision</h4>
-                  <p className="mt-2 text-xs text-neutral-600 leading-relaxed">
-                    A world where teams focus on strategy and growth instead of repetitive manual tasks.
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-[#effcf3]/60 border border-[#a7f3c0]/50 p-5 text-center sm:text-left">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#18864b] text-white mb-3 mx-auto sm:mx-0">
-                    <Sparkles className="h-5 w-5" />
-                  </div>
-                  <h4 className="font-semibold text-neutral-900">Our Approach</h4>
-                  <p className="mt-2 text-xs text-neutral-600 leading-relaxed">
-                    We listen first, build second. Every system is tailored to deliver measurable ROI from day one.
-                  </p>
-                </div>
-              </div>
-
-              {/* Bottom Follow CTA */}
-              <div className="mt-10 pt-8 border-t border-neutral-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-center sm:text-left">
-                  <h4 className="text-base font-semibold text-neutral-900">Follow us on LinkedIn</h4>
-                  <p className="text-xs text-neutral-500">Stay updated with our latest AI systems and announcements.</p>
-                </div>
-                <a
-                  href="https://www.linkedin.com/company/greekroot-ai"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-xs font-semibold text-white transition-all hover:bg-neutral-800 hover:shadow-md"
+              {navigation.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={navLinkClass(item.href)}
                 >
-                  <LinkedinIcon className="h-4 w-4" />
-                  <span>Follow Greek Root AI</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </a>
-              </div>
+                  {item.label}
+                </Link>
+              ))}
             </div>
-          </Reveal>
+
+            <div className="hidden items-center gap-3 xl:flex">
+              <button
+                type="button"
+                onClick={() => setIsCalendlyOpen(true)}
+                className={ctaClass}
+              >
+                <CalendarDays className="h-4 w-4 shrink-0" />
+                <span>Book a Free Discovery Call</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setOpen((value) => !value)}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 bg-white/90 text-neutral-900 transition-colors hover:bg-neutral-100 xl:hidden"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-navigation"
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </nav>
         </div>
 
-      </div>
-    </div>
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              id="mobile-navigation"
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="mx-auto mt-2.5 max-h-[calc(100vh-100px)] max-w-[1380px] overflow-y-auto overscroll-contain rounded-[24px] border border-neutral-300 bg-white/95 p-4 shadow-[0_16px_45px_rgba(0,0,0,0.12)] backdrop-blur-xl xl:hidden"
+            >
+              <div className="flex flex-col gap-1.5">
+                <Link
+                  href="/services"
+                  onClick={closeMenus}
+                  aria-current={servicesActive ? "page" : undefined}
+                  className={cn(
+                    "block rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+                    servicesActive
+                      ? "bg-[#effcf3] text-[#18864b]"
+                      : "text-neutral-700 hover:bg-neutral-100"
+                  )}
+                >
+                  Services
+                </Link>
+
+                {navigation.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={closeMenus}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={cn(
+                      "block rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+                      isActive(item.href)
+                        ? "bg-[#effcf3] text-[#18864b]"
+                        : "text-neutral-700 hover:bg-neutral-100"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-neutral-200">
+                <button
+                  type="button"
+                  onClick={() => {
+                    closeMenus()
+                    setIsCalendlyOpen(true)
+                  }}
+                  className={`${ctaClass} w-full rounded-xl py-3`}
+                >
+                  <CalendarDays className="h-4 w-4 shrink-0" />
+                  <span>Book a Free Discovery Call</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+
+      {isCalendlyOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsCalendlyOpen(false)}
+          />
+          <div className="relative w-full max-w-4xl h-[90vh] max-h-[750px] overflow-hidden rounded-3xl border border-white/10 bg-white shadow-2xl flex flex-col z-10">
+            <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4 bg-neutral-50">
+              <div>
+                <h3 className="text-base font-semibold text-neutral-900">
+                  Greek Root AI – Strategy & Automation Call
+                </h3>
+                <p className="text-xs text-neutral-500">
+                  Pick a date and time that works best for you
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCalendlyOpen(false)}
+                className="rounded-full p-2 text-neutral-500 transition-colors hover:bg-neutral-200 hover:text-neutral-900"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="w-full flex-1 bg-white">
+              <iframe
+                src={CALENDLY_URL}
+                className="h-full w-full border-0"
+                title="Schedule Strategy Call"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
