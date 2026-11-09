@@ -1,235 +1,166 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import React, { useState } from 'react';
 
-export const metadata = {
-  title: "Privacy Policy | Greek Root AI",
-  description:
-    "Privacy Policy governing the collection, use, storage, and protection of personal information by Greek Root AI.",
-};
+interface PrivacySection {
+  id: string;
+  greekTitle: string;
+  title: string;
+  content: React.ReactNode;
+}
 
-export default function PrivacyPolicyPage() {
+const privacyData: PrivacySection[] = [
+  {
+    id: 'collection',
+    greekTitle: 'Gnosis (Γνῶσις)',
+    title: '1. Information We Collect',
+    content: (
+      <>
+        <p className="mb-4 text-slate-600 leading-relaxed">
+          In alignment with <strong>Gnosis</strong> (the Greek concept of knowledge and sensory discovery), 
+          we only process data essential to delivering optimal AI services:
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-slate-600">
+          <li><strong>Prompts &amp; Inputs:</strong> Text, code, files, or imagery you submit to our AI interfaces.</li>
+          <li><strong>Account Identifiers:</strong> Name, email address, billing information, and authentication credentials.</li>
+          <li><strong>Telemetry &amp; Usage Data:</strong> IP addresses, browser types, API latency, and interaction logs.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: 'encryption',
+    greekTitle: 'Kryptos (Κρυπτός)',
+    title: '2. Data Security & Encryption',
+    content: (
+      <p className="text-slate-600 leading-relaxed">
+        Rooted in <strong>Kryptos</strong> (<em>hidden or concealed</em>), all data transmitted between your device 
+        and our neural servers is protected using enterprise-grade TLS 1.3 encryption. Data at rest is stored using 
+        AES-256 encryption standards. We restrict backend access using strict zero-trust access controls.
+      </p>
+    ),
+  },
+  {
+    id: 'ai-training',
+    greekTitle: 'Eidos (Εἶδος)',
+    title: '3. Model Training & Data Isolation',
+    content: (
+      <>
+        <p className="mb-4 text-slate-600 leading-relaxed">
+          We honor the integrity of your intellectual output (<em>Eidos — shape and form</em>):
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-slate-600">
+          <li><strong>Zero Default Training:</strong> Enterprise and API user prompts are <strong>never</strong> used to train or fine-tune our foundation models without explicit opt-in consent.</li>
+          <li><strong>Prompt Isolation:</strong> Inputs are isolated in temporary memory buffers and purged according to your workspace retention policies.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: 'sharing',
+    greekTitle: 'Koinonia (Κοινωνία)',
+    title: '4. Third-Party Sharing & Disclosure',
+    content: (
+      <p className="text-slate-600 leading-relaxed">
+        We do not sell, rent, or trade your personal data. We only share data with essential infrastructure providers 
+        (such as cloud hosts and payment processors) under strict data processing agreements (DPAs), or when legally 
+        compelled by valid court orders.
+      </p>
+    ),
+  },
+  {
+    id: 'rights',
+    greekTitle: 'Autonomia (Αὐτονομία)',
+    title: '5. Your Rights & Data Control',
+    content: (
+      <>
+        <p className="mb-4 text-slate-600 leading-relaxed">
+          You retain full self-governance (<strong>Autonomia</strong>) over your personal data:
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-slate-600">
+          <li><strong>Access &amp; Export:</strong> Request a complete archive of your stored data and conversation histories.</li>
+          <li><strong>Right to Erasure:</strong> Delete your account and purge all associated prompts from our active databases.</li>
+          <li><strong>Opt-Out Options:</strong> Control data analytics and telemetry sharing via your account settings.</li>
+        </ul>
+      </>
+    ),
+  },
+];
+
+export const PrivacyPolicy: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>(privacyData[0].id);
+
   return (
-   <main className="relative min-h-screen overflow-hidden bg-white text-black">
-
-         <div className="relative mx-auto max-w-5xl px-6 py-20">
-
-        <Link
-          href="/"
-           className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm transition hover:border-green-600 hover:text-green-600"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Home
-        </Link>
-
-       <div className="mt-10 rounded-3xl border border-gray-200 bg-white p-8 shadow-xl md:p-12">
-
-           <span className="rounded-full border border-green-200 bg-green-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-green-700">
-            Legal
-          </span>
-
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
         
-          <h1 className="mt-6 text-5xl font-black tracking-tight">
-            Privacy Policy
-          </h1>
-
-              <p className="mt-4 text-gray-600">
-            <span className="font-semibold text-black">
-              Last Updated:
-            </span>{" "}
-            Aug 1, 2026
-          </p>
-
-
-          <div className="mt-12 space-y-12">
-
-            {/* ===================================================== */}
-            {/* 1. INFORMATION WE COLLECT */}
-            {/* ===================================================== */}
-
-            <section>
-        <h2 className="text-2xl font-bold text-black">
-                1. Information We Collect
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Greek Root AI may collect personal information that you
-                voluntarily provide when contacting us, requesting a
-                quotation, purchasing services, subscribing to updates,
-                or communicating through our website. Information may
-                include your name, company, email address, telephone
-                number, billing details, and project-related
-                information.
-              </p>
-
-               <p className="mt-5 leading-8 text-gray-900">
-                We may also collect technical information including IP
-                address, browser type, device information, operating
-                system, usage statistics, cookies, and diagnostic data
-                necessary for security, analytics, and service
-                improvement.
-              </p>
-            </section>
-
-            {/* ===================================================== */}
-            {/* 2. HOW WE USE INFORMATION */}
-            {/* ===================================================== */}
-
-            <section>
-                  <h2 className="text-2xl font-bold text-black">
-                2. How We Use Information
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Information collected by Greek Root AI is used to
-                provide requested services, communicate with clients,
-                process payments, improve platform performance,
-                maintain security, comply with legal obligations, and
-                deliver customer support. We may also use aggregated
-                and anonymized information for business analytics and
-                service enhancement.
-              </p>
-            </section>            {/* ===================================================== */}
-            {/* 3. DATA SHARING & THIRD PARTIES */}
-            {/* ===================================================== */}
-
-            <section>
-              <h2 className="text-2xl font-bold text-black">
-                3. Data Sharing & Third Parties
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Greek Root AI does not sell personal information to
-                third parties. Personal information may be shared only
-                where necessary to provide our services, process
-                payments, comply with legal obligations, protect our
-                rights, or support business operations through trusted
-                service providers.
-              </p>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Our services may rely upon third-party infrastructure,
-                including cloud hosting providers, payment processors,
-                analytics services, communication platforms, and AI
-                technology providers. These providers process data only
-                as required to perform their respective services and in
-                accordance with their own privacy practices.
-              </p>
-            </section>
-
-            {/* ===================================================== */}
-            {/* 4. DATA SECURITY & RETENTION */}
-            {/* ===================================================== */}
-
-            <section>
-              <h2 className="text-2xl font-bold text-black">
-                4. Data Security & Retention
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Greek Root AI implements reasonable administrative,
-                technical, and organizational safeguards designed to
-                protect personal information against unauthorized
-                access, disclosure, alteration, or destruction.
-                However, no method of electronic transmission or
-                storage can be guaranteed to be completely secure.
-              </p>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Personal information is retained only for as long as
-                necessary to fulfill contractual obligations, comply
-                with legal requirements, resolve disputes, enforce our
-                agreements, or support legitimate business purposes.
-                Information that is no longer required may be securely
-                deleted or anonymized in accordance with our data
-                retention practices.
-              </p>
-            </section>
-                        {/* ===================================================== */}
-            {/* 3. DATA SHARING & THIRD PARTIES */}
-            {/* ===================================================== */}
-
-            <section>
-      <h2 className="text-2xl font-bold text-black">
-                3. Data Sharing & Third Parties
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Greek Root AI does not sell personal information to
-                third parties. Personal information may be shared only
-                where necessary to provide our services, process
-                payments, comply with legal obligations, protect our
-                rights, or support business operations through trusted
-                service providers.
-              </p>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Our services may rely upon third-party infrastructure,
-                including cloud hosting providers, payment processors,
-                analytics services, communication platforms, and AI
-                technology providers. These providers process data only
-                as required to perform their respective services and in
-                accordance with their own privacy practices.
-              </p>
-            </section>
-
-            {/* ===================================================== */}
-            {/* 4. DATA SECURITY & RETENTION */}
-            {/* ===================================================== */}
-
-            <section>
-             <h2 className="text-2xl font-bold text-black">
-                4. Data Security & Retention
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Greek Root AI implements reasonable administrative,
-                technical, and organizational safeguards designed to
-                protect personal information against unauthorized
-                access, disclosure, alteration, or destruction.
-                However, no method of electronic transmission or
-                storage can be guaranteed to be completely secure.
-              </p>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Personal information is retained only for as long as
-                necessary to fulfill contractual obligations, comply
-                with legal requirements, resolve disputes, enforce our
-                agreements, or support legitimate business purposes.
-                Information that is no longer required may be securely
-                deleted or anonymized in accordance with our data
-                retention practices.
-              </p>
-            </section>
-                        {/* ===================================================== */}
-            {/* 5. YOUR PRIVACY RIGHTS */}
-            {/* ===================================================== */}
-
-            <section>
-                  <h2 className="text-2xl font-bold text-black">
-                5. Your Privacy Rights
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Subject to applicable law, you may have the right to
-                request access to, correction of, deletion of, or
-                restriction of the personal information we maintain
-                about you. You may also object to certain processing
-                activities or request a copy of your personal data in a
-                portable format where legally applicable.
-              </p>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Requests relating to your privacy rights will be
-                reviewed and processed within a reasonable timeframe.
-                We may request additional information to verify your
-                identity before fulfilling any request.
-              </p>
-            </section>
-
-
+        {/* Header Section */}
+        <div className="bg-slate-900 text-white p-8 sm:p-10">
+          <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+            <span>Greek Roots Privacy Framework</span>
           </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Privacy Policy</h1>
+          <p className="mt-2 text-slate-400 text-sm">
+            Last Updated: November 9, 2026 &bull; Version 1.8
+          </p>
+        </div>
+
+        {/* Content Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 min-h-[500px]">
+          
+          {/* Sidebar Navigation */}
+          <nav className="md:col-span-4 bg-slate-50 border-r border-slate-200 p-4 space-y-1">
+            {privacyData.map((section) => {
+              const isActive = activeTab === section.id;
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveTab(section.id)}
+                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-150 flex flex-col ${
+                    isActive
+                      ? 'bg-emerald-600 text-white shadow-md'
+                      : 'text-slate-700 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <span className={`text-xs font-semibold ${isActive ? 'text-emerald-200' : 'text-slate-400'}`}>
+                    {section.greekTitle}
+                  </span>
+                  <span className="truncate">{section.title}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Active Section Content */}
+          <main className="md:col-span-8 p-6 sm:p-8">
+            {privacyData.map((section) => {
+              if (section.id !== activeTab) return null;
+              return (
+                <div key={section.id} className="animate-fadeIn">
+                  <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
+                    {section.greekTitle}
+                  </span>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 mt-1">
+                    {section.title}
+                  </h2>
+                  <div className="prose prose-slate">
+                    {section.content}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Footer Contact */}
+            <div className="mt-12 pt-6 border-t border-slate-200 text-xs text-slate-500">
+              Data protection inquiries or privacy rights requests:{' '}
+              <a href="mailto:privacy@yourdomain.com" className="text-emerald-600 underline font-medium">
+                privacy@yourdomain.com
+              </a>
+            </div>
+          </main>
+
         </div>
       </div>
-    </main>
+    </div>
   );
-}
+};
+
+export default PrivacyPolicy;

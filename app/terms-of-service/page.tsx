@@ -1,209 +1,171 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import React, { useState } from 'react';
 
-export const metadata = {
-  title: "Terms of Service | Greek Root AI",
-  description:
-    "Terms of Service governing the use of Greek Root AI products and services.",
-};
+interface TermSection {
+  id: string;
+  greekTitle: string;
+  title: string;
+  content: React.ReactNode;
+}
 
-export default function TermsOfServicePage() {
+const termsData: TermSection[] = [
+  {
+    id: 'definitions',
+    greekTitle: 'Lexicon (Λεξικόν)',
+    title: '1. Acceptance & Definitions',
+    content: (
+      <>
+        <p className="mb-4 text-slate-600 leading-relaxed">
+          Welcome to <strong className="text-slate-900">[Your AI Startup Name]</strong> (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). 
+          Our platform operates on classical principles of <em>Cybernetics</em> (from Greek <strong>Kybernetes</strong> — <em>Steersman/Governor</em>) 
+          and <em>Sophia</em> (<strong>Σοφία</strong> — <em>Wisdom</em>). By using our artificial intelligence infrastructure, neural tools, and APIs, 
+          you agree to these Terms.
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-slate-600">
+          <li><strong>&quot;Platform&quot;:</strong> Our proprietary AI models, neural interfaces, and API ecosystems.</li>
+          <li><strong>&quot;User&quot; / &quot;You&quot;:</strong> The entity accessing or directing compute resources.</li>
+          <li><strong>&quot;Outputs&quot;:</strong> Algorithmic text, vision, code, or synthesis returned by the models.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: 'accounts',
+    greekTitle: 'Kratos (Κράτος)',
+    title: '2. Account Credentials & Authority',
+    content: (
+      <p className="text-slate-600 leading-relaxed">
+        To access computational resources, you must establish an authenticated account. You maintain full 
+        responsibility for securing access keys, API tokens, and credentials. Any algorithmic action 
+        dispatched under your access credentials will be attributed directly to your entity.
+      </p>
+    ),
+  },
+  {
+    id: 'acceptable-use',
+    greekTitle: 'Nomos (Νόμος)',
+    title: '3. Acceptable Use Policy',
+    content: (
+      <>
+        <p className="mb-4 text-slate-600 leading-relaxed">
+          Our systems are designed for benevolent innovation. You expressly agree <strong>not</strong> to utilize 
+          our infrastructure to:
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-slate-600">
+          <li>Reverse engineer, decompile, or extract proprietary neural weights and model architectures.</li>
+          <li>Synthesize automated disinformation, deceptive deepfakes, or malicious code.</li>
+          <li>Bypass rate limits, perform model extraction attacks, or launch DDoS vectors against our servers.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: 'ip-rights',
+    greekTitle: 'Ktema (Κτῆμα)',
+    title: '4. Intellectual Property & Ownership',
+    content: (
+      <>
+        <p className="mb-4 text-slate-600 leading-relaxed">
+          <strong>Your Data:</strong> You retain ownership of all original data, prompts, and contextual assets (&quot;Inputs&quot;) 
+          submitted to the platform, as well as the generated &quot;Outputs&quot; produced specifically for you.
+        </p>
+        <p className="text-slate-600 leading-relaxed">
+          <strong>Our Platform:</strong> All baseline models, fine-tuned weights, UI components, algorithms, and 
+          trademarks remain the exclusive property of [Your AI Startup Name].
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'liability',
+    greekTitle: 'Apatheia (Ἀπάθεια)',
+    title: '5. Disclaimers & Limitation of Liability',
+    content: (
+      <p className="text-slate-600 leading-relaxed">
+        Neural networks produce probabilistic outputs. Services are provided on an <strong>&quot;AS IS&quot;</strong> and 
+        <strong>&quot;AS AVAILABLE&quot;</strong> basis without warranties of non-hallucination or 100% precision. 
+        [Your AI Startup Name] shall not be held liable for indirect, incidental, or operational damages resulting 
+        from algorithmic recommendations or service downtime.
+      </p>
+    ),
+  },
+];
+
+export const TermsOfService: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>(termsData[0].id);
+
   return (
-<main className="relative min-h-screen overflow-hidden bg-white text-black">
-      
-      
-
-      <div className="relative mx-auto max-w-5xl px-6 py-20">
-
-        <Link
-          href="/"
-         className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm transition hover:border-green-600 hover:text-green-600"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Home
-        </Link>
-
-        <div className="mt-10 rounded-3xl border border-gray-200 bg-white p-8 shadow-xl md:p-12">
-
-          <span className="rounded-full border border-green-200 bg-green-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-green-700">
-            Legal
-          </span>
-
-          <h1 className="mt-6 text-5xl font-black tracking-tight">
-            Terms of Service
-          </h1>
-
-          <p className="mt-4 text-gray-600">
-            <span className="font-semibold text-black">
-              Last Updated:
-            </span>{" "}
-             Aug 1, 2026
-          </p>
-
-          <div className="mt-12 space-y-12">
-
-            {/* ===================================================== */}
-            {/* 1. ACCEPTANCE OF TERMS */}
-            {/* ===================================================== */}
-
-            <section>
-              <h2 className="text-2xl font-bold text-black">
-                1. Acceptance of Terms
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Access to or use of Greek Root AI services constitutes
-                acceptance of these Terms of Service. Where a user acts
-                on behalf of a company, organization, or other legal
-                entity, they represent and warrant that they possess
-                the authority to legally bind that entity to these
-                Terms. These Terms shall be governed by the applicable
-                laws specified within the governing service agreement,
-                and any disputes shall be subject to the jurisdiction
-                of the competent courts identified therein.
-              </p>
-            </section>
-
-            {/* ===================================================== */}
-            {/* 2. SCOPE OF SERVICES */}
-            {/* ===================================================== */}
-
-            <section>
-              <h2 className="text-2xl font-bold text-black">
-                2. Scope of Services
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Greek Root AI provides artificial intelligence
-                development, AI agents, workflow automation, custom
-                software engineering, website development, business
-                applications, API integrations, cloud solutions, and
-                related consulting services. Deliverables, technical
-                specifications, timelines, and project requirements
-                shall be defined within the applicable proposal,
-                quotation, Statement of Work, or Service Agreement.
-                Certain services rely upon third-party platforms,
-                infrastructure providers, and AI models; therefore,
-                specific performance outcomes or platform behavior
-                cannot be contractually guaranteed.
-              </p>
-            </section>
-                        {/* ===================================================== */}
-            {/* 3. PRICING & PAYMENTS */}
-            {/* ===================================================== */}
-
-            <section>
-              <h2 className="text-2xl font-bold text-black">
-                3. Pricing & Payments
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Service fees shall be specified within the applicable
-                proposal, quotation, subscription plan, or Service
-                Agreement. Unless otherwise agreed in writing, invoices
-                shall be issued in the agreed billing currency and are
-                payable within the payment period stated on the invoice.
-              </p>
-
-              <ul className="mt-6 list-disc space-y-3 pl-6 text-gray-900">
-                <li>
-                  Billing may be monthly, annually, or project-based,
-                  depending on the agreed engagement.
-                </li>
-
-                <li>
-                  Payment shall be made on or before the invoice due
-                  date using an approved payment method.
-                </li>
-
-                <li>
-                  Greek Root AI reserves the right to suspend or
-                  terminate services where payment remains overdue.
-                </li>
-
-                <li>
-                  Any taxes, duties, bank charges, or governmental fees
-                  applicable to the transaction shall be the
-                  responsibility of the client unless otherwise stated.
-                </li>
-              </ul>
-            </section>
-
-            {/* ===================================================== */}
-            {/* 4. INTELLECTUAL PROPERTY & DATA */}
-            {/* ===================================================== */}
-
-            <section>
-              <h2 className="text-2xl font-bold text-black">
-                4. Intellectual Property & Data
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Clients retain ownership of all trademarks, logos,
-                proprietary content, business information, and other
-                materials supplied to Greek Root AI for the purpose of
-                delivering the agreed services.
-              </p>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Greek Root AI retains all rights, title, and interest
-                in its proprietary software, source code, artificial
-                intelligence systems, automation frameworks,
-                methodologies, templates, documentation, internal
-                tools, technical know-how, and related intellectual
-                property developed independently of the client project.
-              </p>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Unless expressly assigned through a separate written
-                agreement, no ownership rights in Greek Root AI
-                intellectual property are transferred to the client.
-                Upon full payment, the client receives only the
-                applicable usage rights expressly granted under the
-                relevant Service Agreement.
-              </p>
-            </section>
-                        {/* ===================================================== */}
-            {/* 5. LIMITATION OF LIABILITY */}
-            {/* ===================================================== */}
-
-            <section>
-              <h2 className="text-2xl font-bold text-black">
-                5. Limitation of Liability
-              </h2>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                To the fullest extent permitted by applicable law,
-                Greek Root AI shall not be liable for any indirect,
-                incidental, consequential, special, or punitive damages
-                arising from the use of its services, including losses
-                resulting from third-party platform changes, artificial
-                intelligence model updates, API modifications, hosting
-                interruptions, cybersecurity incidents beyond our
-                reasonable control, or other external service
-                disruptions.
-              </p>
-
-              <p className="mt-5 leading-8 text-gray-900">
-                Any direct liability of Greek Root AI arising from or
-                relating to the services shall be limited to the total
-                amount of fees paid by the client during the three (3)
-                months immediately preceding the event giving rise to
-                the claim, except where a greater limitation is
-                prohibited by applicable law.
-              </p>
-            </section>
-
-            {/* ===================================================== */}
-            {/* CONTACT INFORMATION */}
-            {/* ===================================================== */}
-
-   
-
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+        
+        {/* Header Section */}
+        <div className="bg-slate-900 text-white p-8 sm:p-10">
+          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+            <span>Greek Roots AI Architecture</span>
           </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Terms of Service</h1>
+          <p className="mt-2 text-slate-400 text-sm">
+            Effective Date: November 9, 2026 &bull; Version 2.4
+          </p>
+        </div>
+
+        {/* Content Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 min-h-[500px]">
+          
+          {/* Sidebar Navigation */}
+          <nav className="md:col-span-4 bg-slate-50 border-r border-slate-200 p-4 space-y-1">
+            {termsData.map((section) => {
+              const isActive = activeTab === section.id;
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveTab(section.id)}
+                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-150 flex flex-col ${
+                    isActive
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'text-slate-700 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <span className={`text-xs font-semibold ${isActive ? 'text-blue-200' : 'text-slate-400'}`}>
+                    {section.greekTitle}
+                  </span>
+                  <span className="truncate">{section.title}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Active Section Content */}
+          <main className="md:col-span-8 p-6 sm:p-8">
+            {termsData.map((section) => {
+              if (section.id !== activeTab) return null;
+              return (
+                <div key={section.id} className="animate-fadeIn">
+                  <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+                    {section.greekTitle}
+                  </span>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 mt-1">
+                    {section.title}
+                  </h2>
+                  <div className="prose prose-slate">
+                    {section.content}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Footer Contact */}
+            <div className="mt-12 pt-6 border-t border-slate-200 text-xs text-slate-500">
+              Need legal clarifications? Contact us at{' '}
+              <a href="mailto:legal@yourdomain.com" className="text-blue-600 underline font-medium">
+                legal@yourdomain.com
+              </a>
+            </div>
+          </main>
+
         </div>
       </div>
-    </main>
+    </div>
   );
-}
-          
+};
+
+export default TermsOfService;
