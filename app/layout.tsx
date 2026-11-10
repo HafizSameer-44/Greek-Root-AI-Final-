@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/icon.png',
   },
+    verification: {
+    google: 'google-site-verification=CfldhLg8HSl4f6E1Cvk2IBB4aUdWS_-3D6LFECb2Ag4',
+  },
 }
 
 export const viewport: Viewport = {
@@ -49,3 +52,4 @@ export default function RootLayout({
     </html>
   )
 }
+
