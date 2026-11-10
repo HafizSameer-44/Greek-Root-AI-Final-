@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 interface PrivacySection {
@@ -85,7 +87,7 @@ const privacyData: PrivacySection[] = [
   },
 ];
 
-export const PrivacyPolicy: React.FC = () => {
+export default function PrivacyPolicy() {
   const [activeTab, setActiveTab] = useState<string>(privacyData[0].id);
 
   return (
@@ -95,7 +97,7 @@ export const PrivacyPolicy: React.FC = () => {
         {/* Header Section */}
         <div className="bg-slate-900 text-white p-8 sm:p-10">
           <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-            <span>Greek Roots Privacy Framework</span>
+            <span>Greek Root AI Privacy Framework</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Privacy Policy</h1>
           <p className="mt-2 text-slate-400 text-sm">
@@ -151,8 +153,8 @@ export const PrivacyPolicy: React.FC = () => {
             {/* Footer Contact */}
             <div className="mt-12 pt-6 border-t border-slate-200 text-xs text-slate-500">
               Data protection inquiries or privacy rights requests:{' '}
-              <a href="mailto:privacy@yourdomain.com" className="text-emerald-600 underline font-medium">
-                privacy@yourdomain.com
+              <a href="mailto:contact@greekroot.org" className="text-emerald-600 underline font-medium">
+                contact@greekroot.org
               </a>
             </div>
           </main>
@@ -161,6 +163,4 @@ export const PrivacyPolicy: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default PrivacyPolicy;
+}

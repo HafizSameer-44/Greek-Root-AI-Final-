@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 interface TermSection {
@@ -15,7 +17,7 @@ const termsData: TermSection[] = [
     content: (
       <>
         <p className="mb-4 text-slate-600 leading-relaxed">
-          Welcome to <strong className="text-slate-900">[Your AI Startup Name]</strong> (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). 
+          Welcome to <strong className="text-slate-900">Greek Root AI</strong> (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). 
           Our platform operates on classical principles of <em>Cybernetics</em> (from Greek <strong>Kybernetes</strong> — <em>Steersman/Governor</em>) 
           and <em>Sophia</em> (<strong>Σοφία</strong> — <em>Wisdom</em>). By using our artificial intelligence infrastructure, neural tools, and APIs, 
           you agree to these Terms.
@@ -70,7 +72,7 @@ const termsData: TermSection[] = [
         </p>
         <p className="text-slate-600 leading-relaxed">
           <strong>Our Platform:</strong> All baseline models, fine-tuned weights, UI components, algorithms, and 
-          trademarks remain the exclusive property of [Your AI Startup Name].
+          trademarks remain the exclusive property of Greek Root AI.
         </p>
       </>
     ),
@@ -83,14 +85,14 @@ const termsData: TermSection[] = [
       <p className="text-slate-600 leading-relaxed">
         Neural networks produce probabilistic outputs. Services are provided on an <strong>&quot;AS IS&quot;</strong> and 
         <strong>&quot;AS AVAILABLE&quot;</strong> basis without warranties of non-hallucination or 100% precision. 
-        [Your AI Startup Name] shall not be held liable for indirect, incidental, or operational damages resulting 
+        Greek Root AI shall not be held liable for indirect, incidental, or operational damages resulting 
         from algorithmic recommendations or service downtime.
       </p>
     ),
   },
 ];
 
-export const TermsOfService: React.FC = () => {
+export default function TermsOfService() {
   const [activeTab, setActiveTab] = useState<string>(termsData[0].id);
 
   return (
@@ -100,7 +102,7 @@ export const TermsOfService: React.FC = () => {
         {/* Header Section */}
         <div className="bg-slate-900 text-white p-8 sm:p-10">
           <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-            <span>Greek Roots AI Architecture</span>
+            <span>Greek Root AI Architecture</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Terms of Service</h1>
           <p className="mt-2 text-slate-400 text-sm">
@@ -156,8 +158,8 @@ export const TermsOfService: React.FC = () => {
             {/* Footer Contact */}
             <div className="mt-12 pt-6 border-t border-slate-200 text-xs text-slate-500">
               Need legal clarifications? Contact us at{' '}
-              <a href="mailto:legal@yourdomain.com" className="text-blue-600 underline font-medium">
-                legal@yourdomain.com
+              <a href="mailto:contact@greekroot.org" className="text-blue-600 underline font-medium">
+                contact@greekroot.org
               </a>
             </div>
           </main>
@@ -166,6 +168,4 @@ export const TermsOfService: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default TermsOfService;
+}
